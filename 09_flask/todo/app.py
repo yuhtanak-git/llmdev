@@ -9,7 +9,7 @@ def load_todos():
     """
     ファイルからTODOリストを読み込む関数
 
-    :return: TODO のリスト
+    :return: TODOリスト
     """
     try:
         with open(TODOS_FILE, "r") as file:
@@ -31,6 +31,8 @@ def save_todos(todos):
 def redirect_to_index():
     """
     indexページへリダイレクトする共通関数
+
+    :return: indexページへのリダイレクトレスポンス
     """
     return redirect(url_for("index"))
 
@@ -62,7 +64,8 @@ def delete(todo_id):
     """
     指定されたIDのTODOを削除する。
 
-    :param todo_id: 削除対象のTODOのインデックス
+    :param todo_id: 削除対象のTODOのインデックス（0始まり）
+    :return: indexページへのリダイレクトレスポンス
     """
     todos = load_todos()
 
