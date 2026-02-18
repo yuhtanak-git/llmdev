@@ -1,0 +1,51 @@
+"""
+Authenticator クラスの単体テスト
+"""
+
+import pytest
+from authenticator import Authenticator
+
+
+@pytest.fixture
+def auth():
+    """
+    テストごとに新しいインスタンスを返す。
+    """
+    return Authenticator()
+
+
+def test_register_success(auth):
+    """
+    メソッドでユーザーが正しく登録されることを確認する。
+    """
+    auth.register("user1", "pass1")
+    assert auth.users["user1"] == "pass1"
+
+
+def test_register_duplicate_user(auth):
+    """
+    既に存在するユーザー名で登録を試みた場合、ValueErrorが発生することの確認。
+    """
+    auth.register("user1", "pass1")
+    with pytest.raises(ValueError, match="エラー: ユーザーは既に存在します。"):
+        auth.register("user1", "pass2")
+
+
+def test_login_success(auth):
+    """
+    正しいユーザー名とパスワードでログインできることの確認。
+    """
+    auth.register("user1", "pass1")
+    result = auth.login("user1", "pass1")
+    assert result == "ログイン成功"
+
+
+def test_login_wrong_password(auth):
+    """
+    誤ったパスワードでログインした場合、ValueErrorが発生することの確認。
+    """
+    auth.register("user1", "pass1")
+    with pytest.raises(
+        ValueError, match="エラー: ユーザー名またはパスワードが正しくありません。"
+    ):
+        auth.login("wrongpass", "wrongpass")
