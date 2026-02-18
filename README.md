@@ -1,4 +1,4 @@
-# techacademy_yuhtanak
+# llmdev
 
 LLMアプリ開発コースの成果物管理リポジトリ
 
