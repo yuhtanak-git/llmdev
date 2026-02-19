@@ -4,6 +4,14 @@ LLMアプリ開発コースの成果物管理リポジトリ
 
 ---
 
+## $ git clone後のやること
+
+```bash
+$ pip install -r requirements-dev.txt
+
+$ npm i
+```
+
 ## 整形
 
 ### Python（black / ruff）
