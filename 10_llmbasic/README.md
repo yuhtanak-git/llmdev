@@ -10,6 +10,12 @@ $ cp .env.example .env
 $ .env
 ```
 
+.env には以下を設定する。
+
+```
+API_KEY=your_openai_api_key
+```
+
 ## 実行方法
 
 IDEの実行ボタンを押す
