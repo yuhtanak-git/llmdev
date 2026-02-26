@@ -11,8 +11,13 @@ from typing import Annotated
 from typing_extensions import TypedDict
 
 # 環境変数を読み込む
-load_dotenv("16_llmapp/.env")
-os.environ['OPENAI_API_KEY'] = os.environ['API_KEY']
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+ENV_PATH = os.path.abspath(os.path.join(BASE_DIR, "..", ".env"))
+
+load_dotenv(ENV_PATH)
+
+# API_KEY を OPENAI_API_KEY に設定
+os.environ["OPENAI_API_KEY"] = os.getenv("API_KEY")
 
 # 使用するモデル名
 MODEL_NAME = "gpt-4o-mini"
