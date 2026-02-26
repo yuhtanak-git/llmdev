@@ -48,7 +48,7 @@ def create_index(persist_directory, embedding_model):
     current_directory = os.path.dirname(current_script_path)
 
     # テキストファイルを読込
-    loader = DirectoryLoader(f'{current_directory}/data/pdf', glob="./*.pdf",   loader_cls=PyPDFLoader)
+    loader = DirectoryLoader(f'{current_directory}/data/pdf', glob="./*.pdf", loader_cls=PyPDFLoader)
     documents = loader.load()
 
     # チャンクに分割
@@ -136,12 +136,22 @@ def stream_graph_updates(graph: StateGraph, user_message: str, thread_id):
     """
     ユーザーからのメッセージを元に、グラフを実行し、チャットボットの応答をストリーミングします。
     """
-    response = graph.invoke(
-        {"messages": [("user", user_message)]},
-        {"configurable": {"thread_id": thread_id}},
-        stream_mode="values"
-    )
-    return response["messages"][-1].content
+    # invoke(stream_mode="values") は環境や状況によって不安定になることがあるため、
+    # stream() で最後まで回しきって最終状態を取得する
+    config = {"configurable": {"thread_id": thread_id}}
+
+    final_state = None
+    for state in graph.stream(
+            {"messages": [HumanMessage(content=user_message)]},
+            config,
+            stream_mode="values",
+    ):
+        final_state = state
+
+    if final_state is None:
+        return ""
+
+    return final_state["messages"][-1].content
 
 # ===== 応答を返す関数 =====
 def get_bot_response(user_message, memory, thread_id):
